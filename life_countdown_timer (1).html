@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生命的保存期限</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .help-icon {
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: -180px;
+            right: -250px;
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            width: 320px;
+            font-size: 12px;
+            line-height: 1.4;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 50px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #2c3e50;
+        }
+
+        .help-icon:hover + .tooltip {
+            display: block;
+        }
+
+        .calc-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .calc-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .result-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            display: none;
+        }
+
+        .result-title {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+        }
+
+        .main-results {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .time-result {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #8e44ad;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .meeting-result {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .details {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 10px;
+            font-size: 1.1em;
+            color: #2c3e50;
+            text-align: left;
+            line-height: 1.8;
+        }
+
+        .call-to-action {
+            margin-top: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            border-radius: 15px;
+        }
+
+        .cta-text {
+            font-size: 1.3em;
+            font-weight: 500;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        .author {
+            margin-top: 30px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #e0e6ed;
+            padding-top: 20px;
+        }
+
+            @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+
+            .help-icon {
+                right: -35px;
+                width: 25px;
+                height: 25px;
+                font-size: 12px;
+            }
+
+            .help-icon::before {
+                top: -8px;
+                left: -8px;
+                right: -8px;
+                bottom: -8px;
+            }
+
+            .tooltip {
+                right: -150px;
+                width: 250px;
+                top: -240px;
+            }
+
+            .tooltip::after {
+                right: 40px;
+            }
+
+            .time-result, .meeting-result {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>生命的保存期限</h1>
+        <p class="subtitle">珍惜每一刻的相聚時光</p>
+        
+        <div class="form-group">
+            <label for="deadline">如果有一天，我們必須互相道別，我們相聚的最後期限可能是...：</label>
+            <div class="input-wrapper">
+                <input type="number" id="deadline" placeholder="請輸入預期壽命年齡" required min="1" max="150" step="0.1">
+                <div class="help-icon">?</div>
+                <div class="tooltip">
+                    <strong>各種生物平均壽命參考：</strong><br>
+                    • 人類男性：77.42歲 (2024台灣數據)<br>
+                    • 人類女性：84.30歲 (2024台灣數據)<br>
+                    • 貓咪：13歲 (室內貓)<br>
+                    • 小狗：12歲 (中小型犬)<br>
+                    • 鸚鵡：25歲 (小型鸚鵡)<br>
+                    • 鴨子：15歲<br>
+                    • 倉鼠：2.5歲<br>
+                    • 變色龍：8歲<br>
+                    • 蜥蜴：15歲<br>
+                    • 蛇：20歲
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="myAge">我的年齡：</label>
+            <input type="number" id="myAge" placeholder="請輸入你的年齡" required min="0" step="0.1">
+        </div>
+
+        <div class="form-group">
+            <label for="theirAge">他的年齡：</label>
+            <input type="number" id="theirAge" placeholder="請輸入對方的年齡" required min="0" step="0.1">
+        </div>
+
+        <div class="form-group">
+            <label for="frequency">我們相見的頻率：</label>
+            <select id="frequency" required>
+                <option value="">請選擇頻率</option>
+                <option value="365">每天見面</option>
+                <option value="52">每週見面一次</option>
+                <option value="24">每月見面兩次</option>
+                <option value="12">每月見面一次</option>
+                <option value="6">每兩個月見面一次</option>
+                <option value="4">每季見面一次</option>
+                <option value="2">每半年見面一次</option>
+                <option value="1">每年見面一次</option>
+            </select>
+        </div>
+
+        <button class="calc-button" id="calculateBtn">計算剩餘時光</button>
+
+        <div class="result-section" id="resultSection">
+            <h2 class="result-title">⏰ 保存期限計算結果</h2>
+            
+            <div class="main-results">
+                <div class="time-result" id="timeResult">保存期限只剩：計算中...</div>
+                <div class="meeting-result" id="meetingResult">換算見面次數為：計算中...</div>
+            </div>
+            
+            <div class="details" id="detailsSection">
+                <p>計算詳情將在這裡顯示</p>
+            </div>
+            
+            <p style="margin-top: 15px; color: #7f8c8d; text-align: center;">
+                時間珍貴，每一次相聚都是無價的回憶
+            </p>
+        </div>
+
+        <div class="call-to-action">
+            <div class="cta-text">把時間留給珍愛的人</div>
+            <a href="https://calendar.google.com/" target="_blank" class="cta-button">
+                Google Calendar 安排聚會
+            </a>
+        </div>
+        
+        <div class="author">
+            <p>作者：林靜 sindylin319@gmail.com</p>
+        </div>
+    </div>
+
+    <script>
+        // 確保頁面載入完成後再執行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('頁面載入完成');
+            
+            // 獲取按鈕元素並添加點擊事件
+            var button = document.getElementById('calculateBtn');
+            if (button) {
+                button.addEventListener('click', calculateLifeTime);
+                console.log('按鈕事件已綁定');
+            } else {
+                console.error('找不到按鈕元素');
+            }
+        });
+
+        function calculateLifeTime() {
+            console.log('=== 開始計算 ===');
+            
+            try {
+                // 獲取輸入元素
+                var deadlineInput = document.getElementById('deadline');
+                var myAgeInput = document.getElementById('myAge');
+                var theirAgeInput = document.getElementById('theirAge');
+                var frequencySelect = document.getElementById('frequency');
+                
+                if (!deadlineInput || !myAgeInput || !theirAgeInput || !frequencySelect) {
+                    console.error('找不到輸入元素');
+                    alert('系統錯誤：找不到輸入欄位');
+                    return;
+                }
+                
+                // 獲取輸入值
+                var deadline = parseFloat(deadlineInput.value);
+                var myAge = parseFloat(myAgeInput.value);
+                var theirAge = parseFloat(theirAgeInput.value);
+                var frequency = parseInt(frequencySelect.value);
+                
+                console.log('輸入數據:', {
+                    deadline: deadline,
+                    myAge: myAge,
+                    theirAge: theirAge,
+                    frequency: frequency
+                });
+                
+                // 驗證輸入
+                if (isNaN(deadline) || isNaN(myAge) || isNaN(theirAge) || isNaN(frequency)) {
+                    alert('請填寫所有欄位');
+                    return;
+                }
+                
+                if (deadline <= 0 || myAge < 0 || theirAge < 0 || frequency <= 0) {
+                    alert('請輸入有效的數值');
+                    return;
+                }
+                
+                // 計算以年齡大的人為基準
+                var olderAge = Math.max(myAge, theirAge);
+                var whoIsOlder = '';
+                
+                if (myAge > theirAge) {
+                    whoIsOlder = '你';
+                } else if (theirAge > myAge) {
+                    whoIsOlder = '對方';
+                } else {
+                    whoIsOlder = '你們';
+                }
+                
+                if (olderAge >= deadline) {
+                    alert('年齡已經超過或達到預期壽命，請調整數值');
+                    return;
+                }
+                
+                // 計算剩餘時間
+                var remainingYears = deadline - olderAge;
+                var remainingMonths = Math.floor(remainingYears * 12);
+                var remainingDays = Math.floor(remainingYears * 365);
+                
+                // 計算見面次數
+                var totalMeetings = Math.floor(remainingYears * frequency);
+                
+                console.log('計算結果:', {
+                    olderAge: olderAge,
+                    whoIsOlder: whoIsOlder,
+                    remainingYears: remainingYears,
+                    totalMeetings: totalMeetings
+                });
+                
+                // 格式化時間顯示
+                var timeString = '';
+                if (remainingYears >= 1) {
+                    timeString = remainingYears.toFixed(1) + ' 年';
+                } else if (remainingMonths >= 1) {
+                    timeString = remainingMonths + ' 個月';
+                } else {
+                    timeString = remainingDays + ' 天';
+                }
+                
+                // 獲取結果顯示元素
+                var timeResult = document.getElementById('timeResult');
+                var meetingResult = document.getElementById('meetingResult');
+                var detailsSection = document.getElementById('detailsSection');
+                var resultSection = document.getElementById('resultSection');
+                
+                if (!timeResult || !meetingResult || !detailsSection || !resultSection) {
+                    console.error('找不到結果顯示元素');
+                    alert('系統錯誤：找不到結果顯示區域');
+                    return;
+                }
+                
+                // 更新顯示內容
+                timeResult.textContent = '保存期限只剩：' + timeString;
+                meetingResult.textContent = '換算見面次數為：' + totalMeetings + ' 次';
+                
+                // 顯示詳細資訊
+                var frequencyText = frequencySelect.options[frequencySelect.selectedIndex].text;
+                
+                detailsSection.innerHTML = 
+                    '<h3 style="color: #2c3e50; margin-bottom: 15px;">📊 詳細計算結果</h3>' +
+                    '<p><strong>預期壽命：</strong>' + deadline + ' 歲</p>' +
+                    '<p><strong>我的年齡：</strong>' + myAge + ' 歲</p>' +
+                    '<p><strong>他的年齡：</strong>' + theirAge + ' 歲</p>' +
+                    '<p><strong>計算基準：</strong>以' + whoIsOlder + '的年齡（' + olderAge + ' 歲）為準</p>' +
+                    '<p><strong>相見頻率：</strong>' + frequencyText + '</p>' +
+                    '<p><strong>預計剩餘時間：</strong>' + remainingYears.toFixed(1) + ' 年</p>' +
+                    '<p><strong>換算為：</strong>' + remainingMonths + ' 個月 或 ' + remainingDays + ' 天</p>' +
+                    '<div style="background: #74b9ff; color: white; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center;">' +
+                    '<strong>❤️ 珍貴的 ' + totalMeetings + ' 次相聚機會</strong>' +
+                    '</div>';
+                
+                // 顯示結果區域
+                resultSection.style.display = 'block';
+                
+                // 滾動到結果
+                setTimeout(function() {
+                    resultSection.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }, 100);
+                
+                console.log('=== 計算完成 ===');
+                
+            } catch (error) {
+                console.error('計算過程發生錯誤:', error);
+                alert('計算過程發生錯誤，請重新嘗試');
+            }
+        }
+    </script>
+</body>
+</html>
