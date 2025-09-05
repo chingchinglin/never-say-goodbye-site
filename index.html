@@ -80,54 +80,72 @@
             box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
         }
 
-        .help-icon {
+        .help-button {
             position: absolute;
-            right: -30px;
+            right: -50px;
             top: 50%;
             transform: translateY(-50%);
-            width: 20px;
-            height: 20px;
+            width: 40px;
+            height: 40px;
             background: #3498db;
             color: white;
+            border: none;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 16px;
             font-weight: bold;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .help-button:hover {
+            background: #2980b9;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .help-button:active {
+            transform: translateY(-50%) scale(0.95);
         }
 
         .tooltip {
-            display: none;
             position: absolute;
-            top: -180px;
-            right: -250px;
+            top: -230px;
+            right: -280px;
             background: #2c3e50;
             color: white;
-            padding: 15px;
-            border-radius: 10px;
-            width: 320px;
-            font-size: 12px;
-            line-height: 1.4;
+            padding: 20px;
+            border-radius: 12px;
+            width: 340px;
+            font-size: 13px;
+            line-height: 1.6;
             z-index: 1000;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(10px);
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
 
         .tooltip::after {
             content: '';
             position: absolute;
-            bottom: -8px;
-            right: 50px;
+            bottom: -10px;
+            right: 70px;
             width: 0;
             height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 8px solid #2c3e50;
-        }
-
-        .help-icon:hover + .tooltip {
-            display: block;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #2c3e50;
         }
 
         .calc-button {
@@ -238,7 +256,7 @@
             padding-top: 20px;
         }
 
-            @media (max-width: 768px) {
+        @media (max-width: 768px) {
             .container {
                 padding: 20px;
                 margin: 10px;
@@ -248,28 +266,22 @@
                 font-size: 2em;
             }
 
-            .help-icon {
-                right: -35px;
-                width: 25px;
-                height: 25px;
-                font-size: 12px;
-            }
-
-            .help-icon::before {
-                top: -8px;
-                left: -8px;
-                right: -8px;
-                bottom: -8px;
+            .help-button {
+                right: -45px;
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
             }
 
             .tooltip {
-                right: -150px;
-                width: 250px;
-                top: -240px;
+                right: -200px;
+                width: 280px;
+                top: -250px;
+                font-size: 12px;
             }
 
             .tooltip::after {
-                right: 40px;
+                right: 50px;
             }
 
             .time-result, .meeting-result {
@@ -287,9 +299,9 @@
             <label for="deadline">如果有一天，我們必須互相道別，我們相聚的最後期限可能是...：</label>
             <div class="input-wrapper">
                 <input type="number" id="deadline" placeholder="請輸入預期壽命年齡" required min="1" max="150" step="0.1">
-                <div class="help-icon">?</div>
-                <div class="tooltip">
-                    <strong>各種生物平均壽命參考：</strong><br>
+                <button type="button" class="help-button" id="helpBtn">?</button>
+                <div class="tooltip" id="tooltip">
+                    <strong>各種生物平均壽命參考：</strong><br><br>
                     • 人類男性：77.42歲 (2024台灣數據)<br>
                     • 人類女性：84.30歲 (2024台灣數據)<br>
                     • 貓咪：13歲 (室內貓)<br>
@@ -361,17 +373,63 @@
     </div>
 
     <script>
-        // 確保頁面載入完成後再執行
         document.addEventListener('DOMContentLoaded', function() {
             console.log('頁面載入完成');
             
-            // 獲取按鈕元素並添加點擊事件
-            var button = document.getElementById('calculateBtn');
-            if (button) {
-                button.addEventListener('click', calculateLifeTime);
-                console.log('按鈕事件已綁定');
+            // 計算按鈕事件
+            var calculateBtn = document.getElementById('calculateBtn');
+            if (calculateBtn) {
+                calculateBtn.addEventListener('click', calculateLifeTime);
+                console.log('計算按鈕事件已綁定');
+            }
+
+            // ? 按鈕事件
+            var helpBtn = document.getElementById('helpBtn');
+            var tooltip = document.getElementById('tooltip');
+            
+            if (helpBtn && tooltip) {
+                console.log('找到 ? 按鈕和提示框');
+                
+                // 點擊事件
+                helpBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    console.log('? 按鈕被點擊');
+                    
+                    if (tooltip.classList.contains('visible')) {
+                        tooltip.classList.remove('visible');
+                        console.log('隱藏提示框');
+                    } else {
+                        tooltip.classList.add('visible');
+                        console.log('顯示提示框');
+                    }
+                });
+
+                // 觸控事件（手機/平板）
+                helpBtn.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    console.log('? 按鈕被觸控');
+                    
+                    if (tooltip.classList.contains('visible')) {
+                        tooltip.classList.remove('visible');
+                    } else {
+                        tooltip.classList.add('visible');
+                    }
+                });
+
+                // 點擊其他地方隱藏提示
+                document.addEventListener('click', function(e) {
+                    if (!helpBtn.contains(e.target) && !tooltip.contains(e.target)) {
+                        tooltip.classList.remove('visible');
+                    }
+                });
+
+                console.log('? 按鈕所有事件已綁定');
             } else {
-                console.error('找不到按鈕元素');
+                console.error('找不到 ? 按鈕或提示框元素');
             }
         });
 
