@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>生命的保存期限</title>
   <style>
     * {
@@ -10,7 +10,6 @@
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -21,7 +20,6 @@
       color: #333;
       padding: 20px;
     }
-
     .container {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 20px;
@@ -32,56 +30,15 @@
       width: 100%;
       text-align: center;
     }
-
-    h1 {
-      color: #2c3e50;
-      margin-bottom: 10px;
-      font-size: 2.5em;
-      font-weight: 300;
-    }
-
-    .subtitle {
-      color: #7f8c8d;
-      margin-bottom: 40px;
-      font-size: 1.1em;
-    }
-
-    .form-group {
-      margin-bottom: 25px;
-      text-align: left;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: #2c3e50;
-    }
-
-    .input-wrapper {
-      position: relative;
-      display: block;
-      width: 100%;
-    }
-
     input,
     select {
-      width: 90%; /* ← 修改：原本是 100%，避免 ? 被擠出去 */
+      width: 90%;
       padding: 12px 15px;
       border: 2px solid #e0e6ed;
       border-radius: 10px;
       font-size: 16px;
-      transition: all 0.3s ease;
       background: white;
     }
-
-    input:focus,
-    select:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
-    }
-
     .help-button {
       position: absolute;
       right: 0;
@@ -101,23 +58,12 @@
       font-weight: bold;
       z-index: 100;
       box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
-      transition: all 0.3s ease;
     }
-
-    .help-button:hover {
-      background: #2980b9;
-      transform: translateY(-50%) scale(1.1);
-    }
-
-    .help-button:active {
-      transform: translateY(-50%) scale(0.95);
-    }
-
     .tooltip {
       position: absolute;
-      top: -300px;     /* ← 調高避免被截掉 */
-      right: -160px;   /* ← 調整對齊 */
-      width: 360px;    /* ← 加寬 */
+      top: -300px;
+      right: -160px;
+      width: 360px;
       background: #2c3e50;
       color: white;
       padding: 20px;
@@ -131,123 +77,23 @@
       transition: all 0.3s ease;
       transform: translateY(10px);
     }
-
     .tooltip.visible {
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
     }
-
-    .tooltip::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      right: 70px;
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 10px solid #2c3e50;
-    }
-
-    .calc-button {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      border-radius: 25px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin: 20px 0;
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-    }
-
-    .calc-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-    }
-
     .result-section {
-      margin-top: 30px;
-      padding: 25px;
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      border-radius: 15px;
       display: none;
+      margin-top: 20px;
+      background: #f3f3f3;
+      padding: 20px;
+      border-radius: 10px;
     }
-
-    .result-title {
-      color: #2c3e50;
-      margin-bottom: 30px;
-      font-size: 1.8em;
-    }
-
-    .main-results {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      margin: 20px 0;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
     .time-result,
     .meeting-result {
-      font-size: 2.2em;
-      font-weight: bold;
-      margin-bottom: 25px;
-      text-align: center;
-      line-height: 1.3;
+      font-size: 1.5em;
+      margin-bottom: 10px;
     }
-
-    .time-result {
-      color: #8e44ad;
-    }
-
-    .meeting-result {
-      color: #27ae60;
-    }
-
-    .details {
-      margin-top: 20px;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 10px;
-      font-size: 1.1em;
-      color: #2c3e50;
-      text-align: left;
-      line-height: 1.8;
-    }
-
-    .call-to-action {
-      margin-top: 40px;
-      padding: 20px;
-      background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-      border-radius: 15px;
-    }
-
-    .cta-text {
-      font-size: 1.3em;
-      font-weight: 500;
-      color: white;
-      margin-bottom: 15px;
-    }
-
-    .cta-button {
-      background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
-      color: white;
-      text-decoration: none;
-      padding: 12px 25px;
-      border-radius: 20px;
-      display: inline-block;
-      transition: all 0.3s ease;
-      font-weight: 500;
-    }
-
-    .cta-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
-    }
-
     .author {
       margin-top: 30px;
       text-align: center;
@@ -256,7 +102,6 @@
       border-top: 1px solid #e0e6ed;
       padding-top: 20px;
     }
-
     .author a {
       color: #7f8c8d;
       text-decoration: underline;
@@ -267,67 +112,100 @@
   <div class="container">
     <h1>生命的保存期限</h1>
     <p class="subtitle">珍惜每一刻的相聚時光</p>
-
     <div class="form-group">
-      <label for="deadline">如果有一天，我們必須互相道別，我們相聚的最後期限可能是...：</label>
-      <div class="input-wrapper">
-        <input type="number" id="deadline" placeholder="請輸入預期壽命年齡">
+      <label for="deadline">我們相聚的最後期限可能是：</label>
+      <div style="position: relative;">
+        <input type="number" id="deadline" placeholder="請輸入預期壽命年齡" />
         <button type="button" class="help-button" id="helpBtn">?</button>
         <div class="tooltip" id="tooltip">
-          <strong>各種生物平均壽命參考：</strong><br><br>
-          • 台灣男性：77.42歲 (2025/8公布)<br>
-          • 台灣女性：84.30歲 (2025/8公布)<br>
-          • 貓咪：13歲 (室內貓)<br>
-          • 小狗：12歲 (中小型犬)<br>
-          • 鸚鵡：25歲 (小型鸚鵡)<br>
-          • 鴨子：15歲<br>
-          • 倉鼠：2.5歲<br>
-          • 變色龍：8歲<br>
-          • 蜥蜴：15歲<br>
+          <strong>各種生物平均壽命參考：</strong><br /><br />
+          • 台灣男性：77.42歲<br />
+          • 台灣女性：84.30歲<br />
+          • 室內貓：13歲<br />
+          • 中小型犬：12歲<br />
+          • 鸚鵡：25歲<br />
+          • 鴨子：15歲<br />
+          • 倉鼠：2.5歲<br />
+          • 蜥蜴：15歲<br />
           • 蛇：20歲
         </div>
       </div>
     </div>
-
-    <!-- 其他欄位保持不變 -->
     <div class="form-group">
       <label for="myAge">我的年齡：</label>
-      <input type="number" id="myAge" placeholder="請輸入你的年齡">
+      <input type="number" id="myAge" placeholder="請輸入你的年齡" />
     </div>
-
     <div class="form-group">
-      <label for="theirAge">他的年齡：</label>
-      <input type="number" id="theirAge" placeholder="請輸入對方的年齡">
+      <label for="theirAge">對方的年齡：</label>
+      <input type="number" id="theirAge" placeholder="請輸入對方的年齡" />
     </div>
-
     <div class="form-group">
       <label for="frequency">我們相見的頻率：</label>
       <select id="frequency">
         <option value="">請選擇頻率</option>
-        <option value="365">每天見面</option>
-        <option value="52">每週見面一次</option>
-        <option value="24">每月見面兩次</option>
-        <option value="12">每月見面一次</option>
-        <option value="6">每兩個月見面一次</option>
-        <option value="4">每季見面一次</option>
-        <option value="2">每半年見面一次</option>
-        <option value="1">每年見面一次</option>
+        <option value="365">每天</option>
+        <option value="52">每週</option>
+        <option value="24">每月兩次</option>
+        <option value="12">每月</option>
+        <option value="6">每兩月</option>
+        <option value="4">每季</option>
+        <option value="2">每半年</option>
+        <option value="1">每年</option>
       </select>
     </div>
-
-    <button class="calc-button" id="calculateBtn">計算剩餘時光</button>
-
-    <div class="call-to-action">
-      <div class="cta-text">把時間留給珍愛的人</div>
-      <a href="https://calendar.google.com/" target="_blank" class="cta-button">
-        Google Calendar 安排聚會
-      </a>
+    <button onclick="calculateLifeTime()">計算剩餘時光</button>
+    <div class="result-section" id="resultSection">
+      <div class="time-result" id="timeResult"></div>
+      <div class="meeting-result" id="meetingResult"></div>
     </div>
-
-    <!-- ✅ 修改為 mailto 連結 -->
     <div class="author">
-      <p>作者：林靜　<a href="mailto:sindylin319@gmail.com">sindylin319@gmail.com</a></p>
+      作者：林靜 <a href="mailto:sindylin319@gmail.com">sindylin319@gmail.com</a>
     </div>
   </div>
+  <script>
+    document.getElementById("helpBtn").addEventListener("click", function () {
+      const tooltip = document.getElementById("tooltip");
+      tooltip.classList.toggle("visible");
+    });
+
+    function calculateLifeTime() {
+      const deadline = parseFloat(document.getElementById("deadline").value);
+      const myAge = parseFloat(document.getElementById("myAge").value);
+      const theirAge = parseFloat(document.getElementById("theirAge").value);
+      const frequency = parseInt(document.getElementById("frequency").value);
+      const resultSection = document.getElementById("resultSection");
+      const timeResult = document.getElementById("timeResult");
+      const meetingResult = document.getElementById("meetingResult");
+
+      if (
+        isNaN(deadline) ||
+        isNaN(myAge) ||
+        isNaN(theirAge) ||
+        isNaN(frequency) ||
+        deadline <= 0 ||
+        myAge < 0 ||
+        theirAge < 0 ||
+        frequency <= 0
+      ) {
+        alert("請正確填寫所有欄位");
+        return;
+      }
+
+      const olderAge = Math.max(myAge, theirAge);
+      if (olderAge >= deadline) {
+        alert("年齡已達或超過壽命，請重新填寫");
+        return;
+      }
+
+      const remainingYears = deadline - olderAge;
+      const remainingDays = Math.floor(remainingYears * 365);
+      const totalMeetings = Math.floor(remainingYears * frequency);
+
+      timeResult.textContent = `保存期限剩餘約 ${remainingYears.toFixed(1)} 年（約 ${remainingDays} 天）`;
+      meetingResult.textContent = `你們大約還能見面 ${totalMeetings} 次`;
+
+      resultSection.style.display = "block";
+    }
+  </script>
 </body>
 </html>
