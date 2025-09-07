@@ -60,11 +60,11 @@
 
         .input-wrapper {
             position: relative;
-            display: flex; /* Use flexbox for alignment */
+            display: flex;
             align-items: center;
             width: 100%;
         }
-
+        
         input, select {
             width: 100%;
             padding: 12px 15px;
@@ -73,12 +73,19 @@
             font-size: 16px;
             transition: all 0.3s ease;
             background: white;
-            flex-grow: 1; /* Allow input to grow */
+            flex-grow: 1;
+            box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height. */
         }
-        /* Make all input bars shorter */
-        #deadline, #myAge, #theirAge {
-            max-width: 350px; /* Adjust as needed */
-            margin-right: 20px; /* Space between input and button */
+        
+        .input-wrapper input {
+            max-width: 400px; /* Set a max-width for consistency */
+            flex-grow: 0; /* Prevents it from growing */
+        }
+
+        .form-group:not(:first-child) input,
+        .form-group select {
+            width: 100%;
+            max-width: 400px; /* Apply the same max-width to other inputs and select */
         }
 
         input:focus, select:focus {
@@ -88,7 +95,10 @@
         }
 
         .help-button {
-            position: static; /* Change to static */
+            position: absolute;
+            right: 0px;
+            top: 50%;
+            transform: translateY(-50%);
             width: 40px;
             height: 40px;
             background: #3498db;
@@ -104,28 +114,27 @@
             z-index: 100;
             box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
             transition: all 0.3s ease;
-            margin-left: 10px; /* Space from input */
         }
 
         .help-button:hover {
             background: #2980b9;
-            transform: scale(1.1);
+            transform: translateY(-50%) scale(1.1);
         }
 
         .help-button:active {
-            transform: scale(0.95);
+            transform: translateY(-50%) scale(0.95);
         }
 
         .tooltip {
             position: absolute;
             top: 50%;
-            right: 0; /* Keep it on the right side of the container */
+            right: 50px; /* Adjust this to be inside the white box */
             transform: translateY(-50%);
             background: #2c3e50;
             color: white;
-            padding: 20px;
+            padding: 15px; /* Adjust padding for better fit */
             border-radius: 12px;
-            width: 280px; /* Reduced width */
+            width: 250px; /* Set a specific width to prevent overflow */
             font-size: 13px;
             line-height: 1.6;
             z-index: 1000;
@@ -133,30 +142,26 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
-            right: -300px; /* Position to be outside the container */
-            top: 50%;
-            transform: translateY(-50%);
         }
 
         .tooltip.visible {
             opacity: 1;
             visibility: visible;
-            transform: translateY(-50%);
         }
 
         .tooltip::after {
             content: '';
             position: absolute;
-            top: 50%; /* Position on the side */
-            left: -10px; /* Point to the left */
+            top: 50%;
+            right: -10px; /* Point to the left */
             transform: translateY(-50%);
             width: 0;
             height: 0;
+            border-left: 10px solid #2c3e50;
             border-top: 10px solid transparent;
             border-bottom: 10px solid transparent;
-            border-right: 10px solid #2c3e50; /* Changed to border-right */
         }
-
+        
         .calc-button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -264,49 +269,6 @@
             border-top: 1px solid #e0e6ed;
             padding-top: 20px;
         }
-        
-        /* Adjust tooltip positioning and width for better fit */
-        .input-wrapper.tooltip-container {
-            position: relative;
-        }
-
-        .tooltip {
-            position: absolute;
-            right: calc(100% + 20px); /* Position it to the left of the container */
-            top: 50%;
-            transform: translateY(-50%);
-            width: 250px;
-            padding: 15px;
-            background: #2c3e50;
-            color: white;
-            border-radius: 12px;
-            font-size: 13px;
-            line-height: 1.6;
-            z-index: 1000;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .tooltip.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .tooltip::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 100%; /* Pointing to the right */
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 10px solid #2c3e50;
-        }
-
 
         @media (max-width: 768px) {
             .container {
@@ -319,20 +281,23 @@
             }
 
             .help-button {
+                right: 0px;
                 width: 35px;
                 height: 35px;
                 font-size: 14px;
             }
 
             .tooltip {
-                right: -200px;
-                width: 280px;
-                top: -250px;
+                right: 45px;
+                width: 250px;
                 font-size: 12px;
             }
 
             .tooltip::after {
-                right: 50px;
+                right: -10px;
+                border-left: 10px solid #2c3e50;
+                border-top: 10px solid transparent;
+                border-bottom: 10px solid transparent;
             }
 
             .time-result, .meeting-result {
@@ -348,13 +313,13 @@
         
         <div class="form-group">
             <label for="deadline">如果有一天，我們必須互相道別，我們相聚的最後期限可能是...：</label>
-            <div class="input-wrapper tooltip-container">
-                <input type="number" id="deadline" placeholder="請輸入預期壽命年齡" required min="1" max="150" step="0.1">
+            <div class="input-wrapper">
+                <input type="number" id="deadline" placeholder="請輸入預期壽命年齡" required min="1" max="150" step="0.1" style="max-width: 400px;">
                 <button type="button" class="help-button" id="helpBtn">?</button>
                 <div class="tooltip" id="tooltip">
                     <strong>各種生物平均壽命參考：</strong><br><br>
-                    • 台灣男性：77.42歲 <br>
-                    • 台灣女性：84.30歲 <br>
+                    • 台灣男性：77.42歲 (2024台灣數據)<br>
+                    • 台灣女性：84.30歲 (2024台灣數據)<br>
                     • 貓咪：13歲 (室內貓)<br>
                     • 小狗：12歲 (中小型犬)<br>
                     • 鸚鵡：25歲 (小型鸚鵡)<br>
@@ -369,12 +334,12 @@
 
         <div class="form-group">
             <label for="myAge">我的年齡：</label>
-            <input type="number" id="myAge" placeholder="請輸入你的年齡" required min="0" step="0.1" style="max-width: 350px;">
+            <input type="number" id="myAge" placeholder="請輸入你的年齡" required min="0" step="0.1">
         </div>
 
         <div class="form-group">
             <label for="theirAge">他的年齡：</label>
-            <input type="number" id="theirAge" placeholder="請輸入對方的年齡" required min="0" step="0.1" style="max-width: 350px;">
+            <input type="number" id="theirAge" placeholder="請輸入對方的年齡" required min="0" step="0.1">
         </div>
 
         <div class="form-group">
@@ -592,7 +557,7 @@
                     '<p><strong>他的年齡：</strong>' + theirAge + ' 歲</p>' +
                     '<p><strong>計算基準：</strong>以' + whoIsOlder + '的年齡（' + olderAge + ' 歲）為準</p>' +
                     '<p><strong>相見頻率：</strong>' + frequencyText + '</p>' +
-                    '<p><strong>預計剩餘時間：</strong>' + remainingYears.toFixed(1) + ' 年</p>' +
+                    '<p><strong>預計剩餘時間：</strong>' + Math.floor(remainingYears) + ' 年</p>' +
                     '<p><strong>換算為：</strong>' + remainingMonths + ' 個月 或 ' + remainingDays + ' 天</p>' +
                     '<div style="background: #74b9ff; color: white; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center;">' +
                     '<strong>❤️ 珍貴的 ' + totalMeetings + ' 次相聚機會</strong>' +
